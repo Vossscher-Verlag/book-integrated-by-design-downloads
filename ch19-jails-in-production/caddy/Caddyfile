@@ -1,0 +1,15 @@
+# Caddyfile -- multi-customer reverse proxy
+# Chapter 19: Jails in Production
+
+{
+    admin unix//var/run/caddy/caddy.sock
+    default_bind 10.0.2.16
+}
+
+u001.enterprise.local:80 {
+    reverse_proxy unix//var/run/nginx-upstream-u001/nginx.sock
+}
+
+u002.enterprise.local:80 {
+    reverse_proxy unix//var/run/nginx-upstream-u002/nginx.sock
+}

@@ -1,0 +1,5 @@
+# /etc/fstab.data-postgres-u001
+# Chapter 18: A Web Stack Without Complexity
+# PostgreSQL creates its socket here (read-write)
+
+/zroot/shared-sockets/data-postgres-u001  /zroot/jails/data-postgres-u001/var/run/postgresql  nullfs  rw  0  0

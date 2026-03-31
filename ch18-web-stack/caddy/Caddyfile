@@ -1,0 +1,6 @@
+# Caddyfile -- reverse proxy via Unix socket
+# Chapter 18: A Web Stack Without Complexity
+
+:80 {
+    reverse_proxy unix//var/run/nginx-upstream/nginx.sock
+}

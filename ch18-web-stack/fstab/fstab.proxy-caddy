@@ -1,0 +1,5 @@
+# /etc/fstab.proxy-caddy
+# Chapter 18: A Web Stack Without Complexity
+# Mounts nginx upstream socket into the proxy jail (read-only)
+
+/zroot/shared-sockets/www-nginx-u001  /zroot/jails/proxy-caddy/var/run/nginx-upstream  nullfs  ro  0  0

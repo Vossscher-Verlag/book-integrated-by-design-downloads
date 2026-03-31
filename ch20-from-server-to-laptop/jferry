@@ -1,0 +1,92 @@
+#!/bin/sh
+# jferry -- Local development with FreeBSD jails
+# Chapter 20: From Server to Laptop
+# Equivalent of: docker CLI
+
+JFERRY_WORKER_DIR="$(cd "$(dirname "$0")/worker" && pwd)"
+JFERRY_STATE="${HOME}/.jferry/project"
+
+. "${JFERRY_WORKER_DIR}/image.sh"
+. "${JFERRY_WORKER_DIR}/machine.sh"
+. "${JFERRY_WORKER_DIR}/share.sh"
+. "${JFERRY_WORKER_DIR}/transport.sh"
+
+usage() {
+    echo "Usage: jferry <command> [argument]"
+    echo ""
+    echo "Commands:"
+    echo "  start <path>   Start VM, mount jail data"
+    echo "  stop           Unmount shares, stop VM"
+    echo "  pull <jail>    Pull jail from server"
+    echo "  push <jail>    Push changes to server"
+    echo "  status         Show VM and share state"
+}
+
+cmd_start() {
+    project_path="${1:?Usage: jferry start /path}"
+
+    if ! check_image; then
+        create_image
+    fi
+
+    if ! check_jferry; then
+        create_jferry
+        echo "Waiting for VM to boot..."
+        while ! ssh -o ConnectTimeout=2 \
+            -o StrictHostKeyChecking=no \
+            -i "${JFERRY_KEY}" \
+            -p "${JFERRY_SSH_PORT}" \
+            root@localhost "true" 2>/dev/null
+        do
+            sleep 2
+        done
+        echo "VM ready."
+    fi
+
+    echo "${project_path}" > "${JFERRY_STATE}"
+    create_share "${project_path}"
+
+    echo "Ready. SSH: ssh -p ${JFERRY_SSH_PORT} root@localhost"
+}
+
+cmd_stop() {
+    if check_jferry; then
+        [ -f "${JFERRY_STATE}" ] \
+            && delete_share "$(cat "${JFERRY_STATE}")"
+        delete_jferry
+        rm -f "${JFERRY_STATE}"
+    else
+        echo "No running VM."
+    fi
+}
+
+cmd_status() {
+    if check_jferry; then
+        echo "VM: running (PID $(cat "${JFERRY_PID}"))"
+    else
+        echo "VM: stopped"
+    fi
+
+    if [ -f "${JFERRY_STATE}" ]; then
+        project_path="$(cat "${JFERRY_STATE}")"
+        conf="${project_path}/${JFERRY_CONF}"
+        if [ -f "${conf}" ]; then
+            echo "Shares:"
+            while read -r jail jail_path local_name; do
+                case "${jail}" in \#*|"") continue ;; esac
+                echo "  ${local_name}/ <- ${jail}:${jail_path}"
+            done < "${conf}"
+        fi
+    else
+        echo "Shares: none"
+    fi
+}
+
+case "${1:-}" in
+    start)  cmd_start "$2" ;;
+    stop)   cmd_stop ;;
+    pull)   create_transport "$2" ;;
+    push)   push_transport "$2" ;;
+    status) cmd_status ;;
+    *)      usage ;;
+esac

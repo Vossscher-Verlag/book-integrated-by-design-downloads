@@ -1,0 +1,6 @@
+# /etc/fstab.www-nginx-u001
+# Chapter 18: A Web Stack Without Complexity
+# Mounts PostgreSQL socket (read-only) and creates nginx upstream socket (read-write)
+
+/zroot/shared-sockets/data-postgres-u001  /zroot/jails/www-nginx-u001/var/run/postgresql       nullfs  ro  0  0
+/zroot/shared-sockets/www-nginx-u001      /zroot/jails/www-nginx-u001/var/run/nginx-upstream    nullfs  rw  0  0
