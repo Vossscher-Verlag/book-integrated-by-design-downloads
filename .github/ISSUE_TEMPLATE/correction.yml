@@ -1,0 +1,81 @@
+name: Correction
+description: Report a typo, factual error, or improvement for the book
+title: "[Correction] "
+labels: ["correction"]
+body:
+  - type: dropdown
+    id: edition
+    attributes:
+      label: Edition
+      options:
+        - "First Edition (e01)"
+    validations:
+      required: true
+  - type: dropdown
+    id: format
+    attributes:
+      label: Format
+      options:
+        - Hardcover
+        - Paperback
+        - Kindle
+    validations:
+      required: true
+  - type: input
+    id: page
+    attributes:
+      label: Page number
+      placeholder: "e.g. 84"
+    validations:
+      required: true
+  - type: input
+    id: chapter
+    attributes:
+      label: Chapter
+      placeholder: "e.g. 6 — Storage Without Layers"
+    validations:
+      required: false
+  - type: textarea
+    id: current
+    attributes:
+      label: Current text
+      description: What the book currently says (quote the passage)
+      placeholder: "The command zfs list -t shows..."
+    validations:
+      required: true
+  - type: textarea
+    id: suggested
+    attributes:
+      label: Suggested correction
+      description: What it should say instead
+      placeholder: "The command zfs list -t snapshot shows..."
+    validations:
+      required: true
+  - type: dropdown
+    id: type
+    attributes:
+      label: Type of correction
+      options:
+        - Typo / spelling
+        - Factual error
+        - Command output mismatch
+        - Broken or outdated command
+        - Unclear explanation
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Anything else that helps (FreeBSD version, error message, etc.)
+    validations:
+      required: false
+  - type: input
+    id: name
+    attributes:
+      label: Your name (for acknowledgement)
+      description: If you'd like to be credited in the next edition, leave your name here.
+      placeholder: "e.g. Jane Doe"
+    validations:
+      required: false

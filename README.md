@@ -41,6 +41,10 @@ The examples use Star Trek naming throughout, consistent with the book:
 - Jails: `cargo-bay-1`, `shuttle-bay`, `astrometrics`
 - Users: `picard` (admin), `worf` (security), `geordi` (infrastructure)
 
+## Found an error?
+
+Help make the book better. If you spot a typo, a factual error, an outdated command, or anything that could be improved, [open a correction](../../issues/new?template=correction.yml). Every confirmed correction is fixed in the next edition, and contributors are acknowledged by name in the book.
+
 ## License
 
 BSD 2-Clause. See [LICENSE](LICENSE).
