@@ -1,0 +1,6 @@
+.DS_Store
+
+# Claude-Blackout (verlag policy — mandatory in public repos, defense-in-depth everywhere)
+CLAUDE.md
+CLAUDE.*
+.claude/
