@@ -4,3 +4,6 @@
 CLAUDE.md
 CLAUDE.*
 .claude/
+
+# Cross-session handover — workspace-local, never tracked nor shipped
+HANDOVER-EXTERN.md
