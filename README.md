@@ -20,12 +20,15 @@ ch20-from-server-to-laptop/ jferry — local FreeBSD development with QEMU
 The `jferry` tool (Chapter 20) lets you run FreeBSD jails on your laptop using QEMU. It downloads a FreeBSD VM image, starts the VM, and mounts jail data via NFS so you can edit files locally.
 
 ```
+jferry firstboot                # One-time: console setup (sshd, key, NFS)
 jferry start /path/to/project   # Boot VM, mount jail data
 jferry stop                     # Unmount, shut down VM
 jferry pull cargo-bay-1         # Pull a jail from your server
 jferry push cargo-bay-1         # Push changes back
 jferry status                   # Show VM and share state
 ```
+
+Run `jferry firstboot` once before anything else — it starts the VM with a display so you can enable `sshd` and NFS from the console. See [`ch20-from-server-to-laptop/README.md`](ch20-from-server-to-laptop/README.md) for the full first-boot walkthrough.
 
 Requirements: QEMU (`brew install qemu` on macOS).
 

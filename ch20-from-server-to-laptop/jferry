@@ -15,11 +15,29 @@ usage() {
     echo "Usage: jferry <command> [argument]"
     echo ""
     echo "Commands:"
+    echo "  firstboot      One-time boot with a display to configure sshd/NFS"
     echo "  start <path>   Start VM, mount jail data"
     echo "  stop           Unmount shares, stop VM"
     echo "  pull <jail>    Pull jail from server"
     echo "  push <jail>    Push changes to server"
     echo "  status         Show VM and share state"
+}
+
+cmd_firstboot() {
+    if ! check_image; then
+        create_image
+    fi
+
+    # firstboot always needs a window; if none is set (or set to "none"),
+    # fall back to the platform default.
+    case "${JFERRY_DISPLAY}" in
+        ""|none) JFERRY_DISPLAY="$(default_display)" ;;
+    esac
+
+    echo "First boot with display '${JFERRY_DISPLAY}'."
+    echo "In the VM console, enable sshd and NFS as the chapter describes,"
+    echo "then run 'poweroff'. Afterwards use 'jferry start'."
+    create_jferry
 }
 
 cmd_start() {
@@ -83,10 +101,11 @@ cmd_status() {
 }
 
 case "${1:-}" in
-    start)  cmd_start "$2" ;;
-    stop)   cmd_stop ;;
-    pull)   create_transport "$2" ;;
-    push)   push_transport "$2" ;;
-    status) cmd_status ;;
-    *)      usage ;;
+    firstboot) cmd_firstboot ;;
+    start)     cmd_start "$2" ;;
+    stop)      cmd_stop ;;
+    pull)      create_transport "$2" ;;
+    push)      push_transport "$2" ;;
+    status)    cmd_status ;;
+    *)         usage ;;
 esac
